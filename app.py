@@ -59,7 +59,7 @@ def add_donor():
     cursor = db.cursor(dictionary=True)
     data   = request.form
 
-    phone = data.get('contact', '').strip()
+    phone = data.get('phone', data.get('contact', '')).strip()
     if not phone.isdigit() or len(phone) != 10:
         cursor.close(); db.close()
         return jsonify({"status": "error", "message": "Phone must be exactly 10 digits."})
@@ -97,7 +97,7 @@ def emergency():
     cursor = db.cursor(dictionary=True)
     data   = request.form
 
-    phone = data.get('contact_phone', '').strip()
+    phone = data.get('phone', data.get('contact_phone', '')).strip()
     if not phone.isdigit() or len(phone) != 10:
         cursor.close(); db.close()
         return jsonify({"status": "error", "message": "Phone must be exactly 10 digits."})
