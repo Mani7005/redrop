@@ -332,16 +332,21 @@ footer {
     <span class="logo-text">Re<span>Drop</span></span>
   </div>
   <div class="header-meta">
-    
+    <strong>DBMS Project — UCS310</strong>
+    Thapar Institute of Engineering &amp; Technology
   </div>
 </header>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-text">
-    
+    <h1>Smart &amp; Sustainable<br><span class="accent">Blood Donation</span></h1>
+    <p>A centralized, database-driven system connecting donors, blood banks, and hospitals — powered by MySQL with PL/SQL procedures, triggers, functions &amp; cursors.</p>
     <div class="hero-badges">
-     
+      <span class="badge badge-plsql">⚡ PL/SQL Procedures &amp; Functions</span>
+      <span class="badge badge-plsql">🔄 Triggers &amp; Cursors</span>
+      <span class="badge badge-other">MySQL 8</span>
+      <span class="badge badge-other">Flask Backend</span>
     </div>
   </div>
 
@@ -352,17 +357,17 @@ footer {
       <div class="stat-label">Total Donors Registered</div>
     </div>
     <div class="stat-card">
-      <span class="drop-icon"></span>
+      <span class="drop-icon">✅</span>
       <div class="stat-num" id="hero-avail">—</div>
       <div class="stat-label">Available Right Now</div>
     </div>
     <div class="stat-card">
-      <span class="drop-icon"></span>
+      <span class="drop-icon">🚨</span>
       <div class="stat-num" id="hero-requests">—</div>
       <div class="stat-label">Emergency Requests</div>
     </div>
     <div class="stat-card">
-      <span class="drop-icon"></span>
+      <span class="drop-icon">🏥</span>
       <div class="stat-num">8<span>+</span></div>
       <div class="stat-label">Blood Groups Tracked</div>
     </div>
@@ -372,13 +377,13 @@ footer {
 <!-- NAV TABS -->
 <div class="nav-strip">
   <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('search')"    id="tab-search"><span class="tab-icon"></span> Find Donors</button>
-    <button class="tab-btn"        onclick="showTab('register')"  id="tab-register"><span class="tab-icon"></span> Register Donor</button>
-    <button class="tab-btn"        onclick="showTab('emergency')" id="tab-emergency"><span class="tab-icon"></span> Emergency Request</button>
-    <button class="tab-btn"        onclick="showTab('stats')"     id="tab-stats"><span class="tab-icon"></span> Blood Stats</button>
-    <button class="tab-btn"        onclick="showTab('donors')"    id="tab-donors"><span class="tab-icon"></span> All Donors</button>
-    <button class="tab-btn"        onclick="showTab('requests')"  id="tab-requests"><span class="tab-icon"></span> All Requests</button>
-    <button class="tab-btn"        onclick="showTab('update')"    id="tab-update"><span class="tab-icon"></span> Update Donor</button>
+    <button class="tab-btn active" onclick="showTab('search')"    id="tab-search"><span class="tab-icon">🔍</span> Find Donors</button>
+    <button class="tab-btn"        onclick="showTab('register')"  id="tab-register"><span class="tab-icon">➕</span> Register Donor</button>
+    <button class="tab-btn"        onclick="showTab('emergency')" id="tab-emergency"><span class="tab-icon">🚨</span> Emergency Request</button>
+    <button class="tab-btn"        onclick="showTab('stats')"     id="tab-stats"><span class="tab-icon">📊</span> Blood Stats</button>
+    <button class="tab-btn"        onclick="showTab('donors')"    id="tab-donors"><span class="tab-icon">👥</span> All Donors</button>
+    <button class="tab-btn"        onclick="showTab('requests')"  id="tab-requests"><span class="tab-icon">📋</span> All Requests</button>
+    <button class="tab-btn"        onclick="showTab('update')"    id="tab-update"><span class="tab-icon">✏️</span> Update Donor</button>
   </div>
 </div>
 
@@ -388,13 +393,16 @@ footer {
   <!-- ═══ SEARCH ═══ -->
   <div class="panel active" id="panel-search">
     <div class="section-head">
-      
+      <div class="tag">PL/SQL Procedure</div>
+      <h2>Find Available Donors</h2>
+      <p>Calls stored procedure <code>find_donors(blood_group, city)</code> which internally calls <code>fn_days_since_donation(donor_id)</code> for each result</p>
     </div>
 
     <div class="plsql-banner">
-      <div class="icon"></div>
+      <div class="icon">⚡</div>
       <div>
-        
+        <h4>Procedure: find_donors(p_blood_group, p_city)</h4>
+        <p>Filters donors by blood group &amp; city, calls fn_days_since_donation() for each result. Only returns is_available = TRUE donors, ordered by last donation date.</p>
       </div>
     </div>
 
@@ -413,7 +421,7 @@ footer {
           <input id="s-city" type="text" placeholder="e.g. Delhi">
         </div>
       </div>
-      <button class="btn btn-blood" onclick="searchDonors()">Search Donors</button>
+      <button class="btn btn-blood" onclick="searchDonors()">🔍 Search Donors</button>
     </div>
 
     <div id="results-area"></div>
@@ -422,7 +430,9 @@ footer {
   <!-- ═══ REGISTER ═══ -->
   <div class="panel" id="panel-register">
     <div class="section-head">
-
+      <div class="tag">SQL INSERT + Trigger Ready</div>
+      <h2>Register New Donor</h2>
+      <p>Inserts into <code>donors</code> table. The trigger <code>trg_check_availability</code> fires automatically on any subsequent UPDATE to manage availability.</p>
     </div>
 
     <div class="split">
@@ -445,20 +455,20 @@ footer {
         <h4 style="font-family:'Syne',sans-serif;font-weight:700;color:#fff;margin-bottom:16px;">Eligibility Rules</h4>
         <div style="display:flex;flex-direction:column;gap:16px;">
           <div style="display:flex;gap:12px;align-items:flex-start;">
-            <span style="font-size:20px;"></span>
-            
+            <span style="font-size:20px;">⏱️</span>
+            <div><div style="color:#fff;font-size:13px;font-weight:600;">90-Day Cooldown</div><div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px;">Trigger auto-sets is_available = FALSE if donated within 90 days</div></div>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-start;">
-            <span style="font-size:20px;"></span>
-            
+            <span style="font-size:20px;">📞</span>
+            <div><div style="color:#fff;font-size:13px;font-weight:600;">Unique Phone</div><div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px;">Each donor must have a unique 10-digit contact (UNIQUE constraint)</div></div>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-start;">
-            <span style="font-size:20px;"></span>
-            
+            <span style="font-size:20px;">🔄</span>
+            <div><div style="color:#fff;font-size:13px;font-weight:600;">Auto Re-Activation</div><div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px;">Availability restores automatically after 90 days on next update</div></div>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-start;">
-            <span style="font-size:20px;"></span>
-            
+            <span style="font-size:20px;">🔑</span>
+            <div><div style="color:#fff;font-size:13px;font-weight:600;">Normalization Applied</div><div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px;">Tables in 3NF/BCNF — blood groups stored separately, no redundancy</div></div>
           </div>
         </div>
       </div>
