@@ -8,7 +8,7 @@ app = Flask(__name__)
 DB_CONFIG = {
     "host":     os.getenv("DB_HOST", "localhost"),
     "user":     os.getenv("DB_USER", "root"),
-    "password": os.getenv("DB_PASSWORD", "mysql123"),   # ← change for local use
+    "password": os.getenv("DB_PASSWORD", "mysql123"),
     "database": os.getenv("DB_NAME", "blood_donation"),
     "port":     int(os.getenv("DB_PORT", 3306))
 }
@@ -37,10 +37,8 @@ def index():
 def search():
     blood_group = unquote(request.args.get('blood_group', '')).strip()
     city        = unquote(request.args.get('city', '')).strip()
-
     if not blood_group or not city:
         return jsonify([])
-
     db     = get_db()
     cursor = db.cursor(dictionary=True)
     cursor.callproc('find_donors', [blood_group, city])
@@ -69,20 +67,20 @@ def add_donor():
         cursor.close(); db.close()
         return jsonify({"status": "error", "message": "A donor with this phone number already exists."})
 
-    # Get blood_group_id from blood_type string
     cursor.execute("SELECT blood_group_id FROM Blood_Group WHERE blood_type = %s", (data['blood_group'],))
     bg_row = cursor.fetchone()
     if not bg_row:
         cursor.close(); db.close()
         return jsonify({"status": "error", "message": "Invalid blood group."})
 
-    bg_id = bg_row['blood_group_id']
+    bg_id         = bg_row['blood_group_id']
+    age           = data.get('age', 25)
+    gender        = data.get('gender', 'Other')
+    last_donation = data.get('last_donation') or None
 
     cursor.execute(
-        """INSERT INTO Donor (name, age, gender, contact, blood_group_id, last_donation, city)
-           VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-        (data['name'], data['age'], data['gender'], phone, bg_id,
-         data['last_donation'] or None, data['city'])
+        "INSERT INTO Donor (name, age, gender, contact, blood_group_id, last_donation, city) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+        (data['name'], age, gender, phone, bg_id, last_donation, data['city'])
     )
     db.commit()
     cursor.close(); db.close()
@@ -108,21 +106,19 @@ def emergency():
         cursor.close(); db.close()
         return jsonify({"status": "error", "message": "Invalid blood group."})
 
-    bg_id = bg_row['blood_group_id']
+    bg_id        = bg_row['blood_group_id']
+    # Support both old frontend (patient_name) and new (hospital_name)
+    hospital_name = data.get('hospital_name', data.get('patient_name', 'Unknown Hospital'))
 
     cursor.execute(
-        """INSERT INTO Emergency_Request (hospital_name, blood_group_id, required_units, contact_phone, urgency, city)
-           VALUES (%s, %s, %s, %s, %s, %s)""",
-        (data['hospital_name'], bg_id, data.get('required_units', 1),
-         phone, data.get('urgency', 'Normal'), data['city'])
+        "INSERT INTO Emergency_Request (hospital_name, blood_group_id, required_units, contact_phone, urgency, city) VALUES (%s,%s,%s,%s,%s,%s)",
+        (hospital_name, bg_id, data.get('required_units', 1), phone, data.get('urgency', 'Normal'), data['city'])
     )
     db.commit()
     req_id = cursor.lastrowid
 
-    # Run match procedure to notify donors
     cursor.callproc('match_emergency_donors', [req_id])
     db.commit()
-
     cursor.close(); db.close()
     return jsonify({"status": "success", "message": "Emergency request submitted! Matching donors notified."})
 
@@ -151,9 +147,9 @@ def donors():
         SELECT
             d.donor_id,
             d.name,
-            bg.blood_type        AS blood_group,
+            bg.blood_type  AS blood_group,
             d.city,
-            d.contact            AS phone,
+            d.contact      AS phone,
             d.age,
             d.gender,
             d.last_donation,
@@ -169,6 +165,8 @@ def donors():
 
 
 # ─── API: All emergency requests ───────────────────────────
+# Returns hospital_name as BOTH hospital_name AND patient_name
+# so the old frontend works without changes
 
 @app.route('/requests')
 def requests_list():
@@ -178,9 +176,10 @@ def requests_list():
         SELECT
             er.request_id,
             er.hospital_name,
-            bg.blood_type   AS blood_group,
+            er.hospital_name  AS patient_name,
+            bg.blood_type     AS blood_group,
             er.required_units,
-            er.contact_phone AS phone,
+            er.contact_phone  AS phone,
             er.urgency,
             er.status,
             er.city,
@@ -203,13 +202,13 @@ def donation_records():
     cursor.execute("""
         SELECT
             dr.donation_id,
-            d.name          AS donor_name,
-            bg.blood_type   AS blood_group,
+            d.name        AS donor_name,
+            bg.blood_type AS blood_group,
             dr.donation_date,
             dr.quantity_ml
         FROM   Donation_Record dr
-        JOIN   Donor d       ON dr.donor_id       = d.donor_id
-        JOIN   Blood_Group bg ON d.blood_group_id = bg.blood_group_id
+        JOIN   Donor d        ON dr.donor_id       = d.donor_id
+        JOIN   Blood_Group bg ON d.blood_group_id  = bg.blood_group_id
         ORDER  BY dr.donation_date DESC
     """)
     rows = [date_to_str(r) for r in cursor.fetchall()]
@@ -243,16 +242,16 @@ def notifications():
     cursor.execute("""
         SELECT
             dn.notification_id,
-            d.name           AS donor_name,
-            bg.blood_type    AS blood_group,
+            d.name              AS donor_name,
+            bg.blood_type       AS blood_group,
             er.hospital_name,
             er.city,
             dn.notification_status,
             dn.notified_at
         FROM   Donor_Notification dn
-        JOIN   Donor d            ON dn.donor_id   = d.donor_id
+        JOIN   Donor d              ON dn.donor_id   = d.donor_id
         JOIN   Emergency_Request er ON dn.request_id = er.request_id
-        JOIN   Blood_Group bg     ON d.blood_group_id = bg.blood_group_id
+        JOIN   Blood_Group bg       ON d.blood_group_id = bg.blood_group_id
         ORDER  BY dn.notified_at DESC
     """)
     rows = [date_to_str(r) for r in cursor.fetchall()]
@@ -268,7 +267,6 @@ def update_donor():
     cursor = db.cursor(dictionary=True)
     donor_id      = request.form.get('donor_id')
     last_donation = request.form.get('last_donation')
-
     cursor.execute(
         "UPDATE Donor SET last_donation = %s WHERE donor_id = %s",
         (last_donation, donor_id)
