@@ -342,32 +342,27 @@ footer {
   <div class="hero-text">
     <h1>Smart &amp; Sustainable<br><span class="accent">Blood Donation</span></h1>
     <p>A centralized, database-driven system connecting donors, blood banks, and hospitals — powered by MySQL with PL/SQL procedures, triggers, functions &amp; cursors.</p>
-    <div class="hero-badges">
-      <span class="badge badge-plsql">⚡ PL/SQL Procedures &amp; Functions</span>
-      <span class="badge badge-plsql">🔄 Triggers &amp; Cursors</span>
-      <span class="badge badge-other">MySQL 8</span>
-      <span class="badge badge-other">Flask Backend</span>
-    </div>
+    
   </div>
 
   <div class="hero-stats">
     <div class="stat-card">
-      <span class="drop-icon">🩸</span>
+      <span class="drop-icon"></span>
       <div class="stat-num" id="hero-total">—</div>
       <div class="stat-label">Total Donors Registered</div>
     </div>
     <div class="stat-card">
-      <span class="drop-icon">✅</span>
+      <span class="drop-icon"></span>
       <div class="stat-num" id="hero-avail">—</div>
       <div class="stat-label">Available Right Now</div>
     </div>
     <div class="stat-card">
-      <span class="drop-icon">🚨</span>
+      <span class="drop-icon"></span>
       <div class="stat-num" id="hero-requests">—</div>
       <div class="stat-label">Emergency Requests</div>
     </div>
     <div class="stat-card">
-      <span class="drop-icon">🏥</span>
+      <span class="drop-icon"></span>
       <div class="stat-num">8<span>+</span></div>
       <div class="stat-label">Blood Groups Tracked</div>
     </div>
@@ -455,19 +450,19 @@ footer {
         <h4 style="font-family:'Syne',sans-serif;font-weight:700;color:#fff;margin-bottom:16px;">Eligibility Rules</h4>
         <div style="display:flex;flex-direction:column;gap:16px;">
           <div style="display:flex;gap:12px;align-items:flex-start;">
-            <span style="font-size:20px;">⏱️</span>
+            <span style="font-size:20px;"></span>
             <div><div style="color:#fff;font-size:13px;font-weight:600;">90-Day Cooldown</div><div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px;">Trigger auto-sets is_available = FALSE if donated within 90 days</div></div>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-start;">
-            <span style="font-size:20px;">📞</span>
+            <span style="font-size:20px;"></span>
             <div><div style="color:#fff;font-size:13px;font-weight:600;">Unique Phone</div><div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px;">Each donor must have a unique 10-digit contact (UNIQUE constraint)</div></div>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-start;">
-            <span style="font-size:20px;">🔄</span>
+            <span style="font-size:20px;"></span>
             <div><div style="color:#fff;font-size:13px;font-weight:600;">Auto Re-Activation</div><div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px;">Availability restores automatically after 90 days on next update</div></div>
           </div>
           <div style="display:flex;gap:12px;align-items:flex-start;">
-            <span style="font-size:20px;">🔑</span>
+            <span style="font-size:20px;"></span>
             <div><div style="color:#fff;font-size:13px;font-weight:600;">Normalization Applied</div><div style="color:rgba(255,255,255,0.45);font-size:12px;margin-top:2px;">Tables in 3NF/BCNF — blood groups stored separately, no redundancy</div></div>
           </div>
         </div>
@@ -486,7 +481,7 @@ footer {
     <div class="split">
       <div class="glass-card" style="border-color:rgba(192,24,26,0.25);">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
-          <span style="font-size:36px;">🚨</span>
+          <span style="font-size:36px;"></span>
           <div>
             <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:#fff;">Critical Request Form</div>
             <div style="font-size:13px;color:rgba(255,255,255,0.4);">Visible to all hospital coordinators immediately</div>
@@ -505,7 +500,7 @@ footer {
             <select id="e-urgency"><option>Normal</option><option>Urgent</option><option>Critical</option></select>
           </div>
         </div>
-        <button class="btn btn-blood" onclick="submitEmergency()" style="width:100%;margin-top:8px;">🚨 Submit Emergency Request</button>
+        <button class="btn btn-blood" onclick="submitEmergency()" style="width:100%;margin-top:8px;"> Submit Emergency Request</button>
         <div class="alert" id="e-alert"></div>
       </div>
 
@@ -521,7 +516,7 @@ footer {
             <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:8px;">Required within a few hours. Coordinators alerted immediately.</p>
           </div>
           <div style="padding:16px;background:rgba(192,24,26,0.1);border-radius:12px;">
-            <span class="urgency-pill urgency-Critical">🚨 Critical</span>
+            <span class="urgency-pill urgency-Critical"> Critical</span>
             <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:8px;">Life-threatening. All eligible donors notified instantly.</p>
           </div>
         </div>
@@ -538,7 +533,7 @@ footer {
     </div>
 
     <div class="plsql-banner">
-      <div class="icon">🔄</div>
+      <div class="icon"></div>
       <div>
         <h4>Cursor: bg_cursor — iterates all blood groups with FETCH LOOP</h4>
         <p>Pattern: DECLARE CURSOR → OPEN → FETCH INTO variables → CONTINUE HANDLER FOR NOT FOUND → LEAVE LOOP → CLOSE. Results collected into TEMPORARY TABLE.</p>
@@ -577,7 +572,7 @@ footer {
     </div>
 
     <div class="plsql-banner">
-      <div class="icon">⚡</div>
+      <div class="icon"></div>
       <div>
         <h4>Trigger: trg_check_availability (BEFORE UPDATE on donors)</h4>
         <p>Fires on every UPDATE. Uses DATEDIFF(CURDATE(), NEW.last_donation): if &lt; 90 days → is_available = FALSE, else → TRUE. Transparent to the application layer.</p>
@@ -590,7 +585,7 @@ footer {
           <div class="form-field"><label>Donor ID</label><input id="u-id" type="number" placeholder="e.g. 1"></div>
           <div class="form-field"><label>New Last Donation Date</label><input id="u-date" type="date"></div>
         </div>
-        <button class="btn btn-blood" onclick="updateDonor()" style="width:100%;margin-top:8px;">⚡ Update &amp; Fire Trigger</button>
+        <button class="btn btn-blood" onclick="updateDonor()" style="width:100%;margin-top:8px;"> Update &amp; Fire Trigger</button>
         <div class="alert" id="u-alert"></div>
       </div>
 
@@ -702,7 +697,7 @@ function donorCard(d) {
   return `<div class="donor-card">
     <div class="donor-top"><div class="donor-avatar">${init}</div><span class="bg-badge">${d.blood_group}</span></div>
     <div class="donor-name">${d.name}</div>
-    <div class="donor-meta"><span>📍 ${d.city}</span><span>📞 ${d.phone}</span></div>
+    <div class="donor-meta"><span>📍 ${d.city}</span><span> ${d.phone}</span></div>
     <div class="avail-pill ${avail?'yes':'no'}"><div class="dot ${avail?'yes':'no'}"></div>${avail?'Available':'Unavailable — donated recently'}</div>
     <div class="days-chip">${dayStr}</div>
   </div>`;
@@ -750,7 +745,7 @@ async function loadStats() {
   area.innerHTML = '<div class="spinner"></div>';
   try {
     const data = await (await fetch('/stats')).json();
-    if (!data.length) { area.innerHTML=`<div class="empty-state"><div class="icon">📊</div><p>No data yet.</p></div>`; return; }
+    if (!data.length) { area.innerHTML=`<div class="empty-state"><div class="icon"></div><p>No data yet.</p></div>`; return; }
     const maxT = Math.max(...data.map(r=>r.total_donors));
     area.innerHTML = `<div class="stats-grid">${data.map(r=>`<div class="stat-row">
       <div class="stat-bg-label">${r.blood_group}</div>
@@ -795,7 +790,7 @@ async function loadRequests() {
   area.innerHTML = '<div class="spinner"></div>';
   try {
     const data = await (await fetch('/requests')).json();
-    if (!data.length) { area.innerHTML=`<div class="empty-state"><div class="icon">📋</div><p>No requests yet.</p></div>`; return; }
+    if (!data.length) { area.innerHTML=`<div class="empty-state"><div class="icon"></div><p>No requests yet.</p></div>`; return; }
     area.innerHTML = `<div class="table-wrap"><table>
       <thead><tr><th>ID</th><th>Patient</th><th>Blood Group</th><th>City</th><th>Phone</th><th>Urgency</th><th>Date</th></tr></thead>
       <tbody>${data.map(r=>`<tr>
